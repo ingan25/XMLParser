@@ -1,0 +1,116 @@
+package XMLParser1;
+
+import org.xml.sax.Attributes;
+
+public class Engine{
+	static final String MAGICONELOGGER = "magicOneLogger";
+	static final String LOG4JWATCHINTERVAL = "log4jWatchInterval";
+	static final String SQLLOGLEVEL = "sqlLogLevel";
+	static final String USERFUNCTIONPATH = "userFunctionPath";
+	static final String XMLENCODING = "xmlEncoding";
+	static final String STANDALONE = "standAlone";
+	static final String DEVELOPMODE = "developMode";
+	
+	private String magicOneLogger;
+	private int log4jWatchInterval;
+	private String sqlLogLevel;
+	private String userFunctionPath;
+	private String xmlEncoding;
+	private String streamEnabled;
+	private String standAlone;
+	private String developMode;
+	
+	
+	public String getmagicOneLogger() {
+		return magicOneLogger;
+	}
+	public void setmagicOneLogger(String magicOneLogger) {
+		this.magicOneLogger = magicOneLogger;
+	}
+	public int getlog4jWatchInterval() {
+		return log4jWatchInterval;
+	}
+	public void setlog4jWatchInterval(int log4jWatchInterval) {
+		this.log4jWatchInterval = log4jWatchInterval;
+	}
+	public String getsqlLogLevel() {
+		return sqlLogLevel;
+	}
+	public void setsqlLogLevel(String sqlLogLevel) {
+		this.sqlLogLevel = sqlLogLevel;
+	}
+	public String getuserFunctionPath() {
+		return userFunctionPath;
+	}
+	public void setuserFunctionPath(String userFunctionPath) {
+		this.userFunctionPath = userFunctionPath;
+	}
+	public String getxmlEncoding() {
+		return xmlEncoding;
+	}
+	public void setxmlEncoding(String xmlEncoding) {
+		this.xmlEncoding = xmlEncoding;
+	}
+	public String getstreamEnabled() {
+		return streamEnabled;
+	}
+	public void setstreamEnabled(String streamEnabled) {
+		this.streamEnabled = streamEnabled;
+	}
+	public String getstandAlone() {
+		return standAlone;
+	}
+	public void setstandAlone(String standAlone) {
+		this.standAlone = standAlone;
+	}
+	public String getdevelopMode() {
+		return developMode;
+	}
+	public void setdevelopMode(String developMode) {
+		this.developMode = developMode;
+	}
+	
+	public static String getAttribute(Attributes attr, String name){
+		String o = attr.getValue(name);
+		return o == null ? "" : o;
+	}
+	
+	public static int getAttributeInt(Attributes attr, String name, int defaultValue){
+		try{
+			String o = attr.getValue(name);
+			return Integer.parseInt(o);
+		}catch(Exception e){
+			return defaultValue;
+		}
+	}
+	
+	private String getAttributeBool(Attributes attr, String name, String defaultValue){
+		
+		String o = attr.getValue(name);
+		return o == "true" ? "ture" : defaultValue;
+	}
+	
+	Engine(Attributes attr) {
+		magicOneLogger = getAttribute(attr, MAGICONELOGGER);
+		log4jWatchInterval = getAttributeInt(attr, LOG4JWATCHINTERVAL, -1);
+		sqlLogLevel = getAttribute(attr, SQLLOGLEVEL);
+		userFunctionPath = getAttribute(attr, USERFUNCTIONPATH);
+		xmlEncoding = getAttribute(attr, XMLENCODING);
+		standAlone = getAttribute(attr, STANDALONE);
+		developMode = getAttribute(attr, DEVELOPMODE);
+	}
+	
+	public String toString() {
+		return  "Engine DevelopMode : " + getdevelopMode() + "\n" +
+				   "\t - stand Alone : " + getstandAlone() + "\n" + 
+				   "\t - stream Enabled: " + getstreamEnabled() + "\n" + 
+				   "\t - xml Encoding : " + getxmlEncoding() + "\n" + 
+				   "\t - user Function Path : " + getuserFunctionPath() + "\n" + 
+				   "\t - sql LogLevel : " + getsqlLogLevel() + "\n" + 
+				   "\t - log4j Watch Interval : " + getlog4jWatchInterval() + "\n" +
+				   "\t - magic One Logger : " + getmagicOneLogger();
+	}
+	
+	
+
+}

@@ -1,0 +1,192 @@
+package XMLParser1;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+class ConfigParser extends DefaultHandler{
+	static final String ENGINE = "Engine";
+	static final String EXECUTOR = "Executor";
+	static final String QUEUEMANAGER = "QueueManager";
+	static final String DATASOURCE = "DataSource";
+	static final String CHANNEL = "Channel";
+	
+	static final String DEVELOPMODE = "developMode";
+	static final String STANDALONE = "standAlone";
+	static final String STREAMENABLED = "streamEnabled";
+	static final String XMLENCODING = "xmlEncoding";
+	static final String USERFUNCTIONPATH= "userfunctionpath";
+	static final String SQLLOGLEVEL = "sqlloglevel";
+	static final String LOG4JWATCHINTERVAL = "log4jwatchinterval";
+	static final String MAGICONELOGGER = "magiconelogger";
+	static final String EXECUTEQUEUEMAXSIZE = "executeQueueMaxSize";
+	static final String EXECUTETHREADMAXSIZE = "executeThreadMaxSize";
+	static final String MANAGERENABLED= "managerEnabled";
+	static final String DRIVER = "driver";
+	static final String URL = "url";
+	static final String USER= "user";
+	static final String PASSWORD = "password";
+	static final String MAXPOOLSIZE= "maxPoolSize";
+	static final String MINPOOLSIZE= "minPoolSize";
+	static final String ACQUISITIONTIMEOUT ="acquisitionTimeout";
+	static final String RERUNREQUESTONSTART = "rerunRequestOnStart";
+	static final String ACQUIREINCREMENT="acquireIncrement";
+	static final String JNDINAME="jndiName";
+	static final String MAXIDLETIME="maxIdleTime";
+	static final String STMTCACHESIZE="stmtCacheSize";
+	static final String TESTQUERY="testQuery";
+	static final String NAME="name";
+	static final String PORT="port";
+	static final String PROTOCOLHANDLER="protocolHandler";
+	
+	private final Map<String, ConfigObject> maps = Collections.synchronizedMap(new LinkedHashMap<String, ConfigObject>());
+	
+	private SAXParserFactory spf;
+	private SAXParser saxp;
+	private ConfigObject ro = new ConfigObject();
+	
+	public ConfigParser(File configFile) throws Exception  {
+		super();
+		parse(configFile);
+	}
+
+	public void parse(File configFile) throws Exception {
+		synchronized(maps){
+			if(maps.size() > 0){
+				maps.clear();
+			}
+			spf = SAXParserFactory.newInstance();
+			saxp = spf.newSAXParser();
+			saxp.parse(configFile, this);
+		}
+	}
+	
+	public void startElement(String uri, String localName, String qName, Attributes attr) throws SAXException {
+		if(ENGINE.equals(qName)){
+			try{
+				Engine engine = new Engine(attr);
+				
+				ro.setEngine(engine);
+				
+				maps.put(ENGINE, ro);
+			} catch(Exception e){
+				System.out.println("Engine 변수값 오류:" + e.toString());
+			}
+		} else if(EXECUTOR.equals(qName)) {
+			try{
+				Executor executor = new Executor(attr);
+				
+				ro.setExecutor(executor);
+				
+				maps.put(EXECUTOR, ro);
+			} catch(Exception e){
+				System.out.println("Executor 변수값 오류:" + e.toString());
+			}
+		} else if(QUEUEMANAGER.equals(qName)) {
+			try{
+				QueueManager queueManager = new QueueManager(attr);
+				
+				ro.setQueueManager(queueManager);
+				
+				maps.put(QUEUEMANAGER, ro);
+			} catch(Exception e){
+				System.out.println("QueueManager 변수값 오류:" + e.toString());
+			}
+		} else if(DATASOURCE.equals(qName)) {
+			try{
+				DataSource dataSource = new DataSource(attr);
+				
+				ro.setDataSource(dataSource);
+				
+				maps.put(DATASOURCE, ro);
+			} catch(Exception e){
+				System.out.println("DataSource 변수값 오류:" + e.toString());
+				e.printStackTrace();
+			}
+		} else if(CHANNEL.equals(qName)) {
+			try{
+				Channel channel = new Channel(attr);
+				
+				ro.setChannel(channel);
+
+				maps.put(CHANNEL, ro);
+			} catch(Exception e){
+				System.out.println("Channel 변수값 오류:" + e.toString());
+			}
+		}
+	}
+	
+	private String getAttribute(Attributes attr, String name){
+		String o = attr.getValue(name);
+		return o == null ? "" : o;
+	}
+	private int getAttributeInt(Attributes attr, String name, int defaultValue){
+		try{
+			String o = attr.getValue(name);
+			return Integer.parseInt(o);
+		}catch(Exception e){
+			return defaultValue;
+		}
+	}
+	
+	private String getAttributeBool(Attributes attr, String name, String defaultValue){
+		
+			String o = attr.getValue(name);
+			return o == "true" ? "ture" : defaultValue;
+	}
+	
+	public Engine getEngine() {
+		return ro.getEngine();
+	}
+	
+	public Executor getExecutor() {
+		return ro.getExecutor();
+	}
+	
+	public QueueManager getQueueManager() {
+		return ro.getQueueManager();
+	}
+	
+	public ArrayList<DataSource> getDataSource() {
+		return ro.getDataSource();
+	}
+	
+	public DataSource getDataSource(String name) {
+		int size = ro.getDataSource().size();
+		for(int i=0; i<size; i++) {
+			if(ro.getDataSource().get(i).getJndiName().equals(name)) {
+				return ro.getDataSource().get(i);
+			}
+		}
+		return null;
+	}
+
+	public ArrayList<Channel> getChannel() {
+		return ro.getChannel();
+	}
+	
+	public Channel getChannel(String name) {
+		int size = ro.getChannel().size();
+		for(int i=0; i<size; i++) {
+			if(ro.getChannel().get(i).getName().equals(name)) {
+				return ro.getChannel().get(i);
+			}
+		}
+		return null;
+	}
+	
+	public ConfigObject getConfigObject() {
+		return ro;
+	}
+}

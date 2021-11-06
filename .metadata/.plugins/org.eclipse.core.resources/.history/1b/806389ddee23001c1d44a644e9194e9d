@@ -1,0 +1,28 @@
+package XMLParser1;
+
+import java.io.File;
+
+public class config_behavior {
+
+	public static void main(String[] args) {
+		String jndiName = "jdbc/mssql/magicone";
+		String channelName = "defaultChannel";
+		File file = new File("C:\\Temp\\config.xml");
+
+		try {
+			ConfigParser rp = new ConfigParser(file);
+
+			ConfigObject config = rp.getConfigObject();
+			System.out.println(rp.getEngine());
+			System.out.println(rp.getExecutor());
+			System.out.println(rp.getQueueManager());
+			System.out.println(rp.getDataSource(jndiName));
+			System.out.println(rp.getDataSource());
+			System.out.println(rp.getChannel(channelName));
+			System.out.println(rp.getChannel());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+}

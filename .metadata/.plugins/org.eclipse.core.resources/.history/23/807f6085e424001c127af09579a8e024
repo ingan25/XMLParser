@@ -1,0 +1,50 @@
+package TempVo;
+
+import java.sql.*;
+public class test {
+    public static void main(String[] args) {
+        String driver = "oracle.jdbc.driver.OracleDriver";
+        String url = "jdbc:oracle:thin:@localhost:1521:SYSTEM";
+        String user = "system";
+        String pwd = "howang12";
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        String sql;
+        ResultSet rs = null;
+        ResultSetMetaData rsmd;  //ResultSetMetaData 객체 변수 선언
+       
+         try{
+            Class.forName(driver);
+            con = DriverManager.getConnection(url, user, pwd);
+           
+            sql = "SELECT * FROM customer";
+            pstmt = con.prepareStatement(sql);
+           
+            rs = pstmt.executeQuery();
+            //ResultSet 객체로 getMetaData() 메서드를 호출하여 ResultSetMetaData 객체 생성
+           
+            rsmd = rs.getMetaData();
+           
+            //ResultSetMetaData의 getColumnCount() 메서드는 컬럼의 개수를 반환한다.
+            int cols = rsmd.getColumnCount();
+           
+            //컬럼 목록 보여주기
+            for(int i = 1; i<=cols; i++){
+                //ResultSetMetaData의 getColumnName()메서드는 해당위치의 컬럼명을 반환
+                System.out.println(rsmd.getColumnName(i)+"\t\t");
+            }
+            System.out.println();
+            //얻어낸 컬럼 값 보여주기
+            while(rs.next()){
+                for(int i = 1; i<=cols; i++)
+                    System.out.print(rs.getObject(i)+"\t\t");
+                System.out.println();
+            }
+            rs.close();
+            pstmt.close();
+            con.close();
+         }catch(Exception e){
+             e.printStackTrace();
+         }
+    }
+}

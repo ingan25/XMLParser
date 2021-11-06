@@ -1,0 +1,226 @@
+package xxml;
+
+import java.io.File;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+
+
+public class ConfigParser extends DefaultHandler{
+
+	static final String ENGINE = "Engine";
+	static final String EXECUTOR = "Executor";
+	static final String QUEUEMANAGER = "QueueManager";
+	static final String DATASOURCE = "DataSource";
+	static final String CHANNEL = "Channel";
+	
+	static final String DEVELOPMODE = "developMode";
+	static final String STANDALONE = "standAlone";
+	static final String STREAMENABLED = "streamEnabled";
+	static final String XMLENCODING = "xmlEncoding";
+	static final String USERFUNCTIONPATH= "userfunctionpath";
+	static final String SQLLOGLEVEL = "sqlloglevel";
+	static final String LOG4JWATCHINTERVAL = "log4jwatchinterval";
+	static final String MAGICONELOGGER = "magiconelogger";
+	static final String EXECUTEQUEUEMAXSIZE = "executeQueueMaxSize";
+	static final String EXECUTETHREADMAXSIZE = "executeThreadMaxSize";
+	static final String MANAGERENABLED= "managerEnabled";
+	static final String DRIVER = "driver";
+	static final String URL = "url";
+	static final String USER= "user";
+	static final String PASSWORD = "password";
+	static final String MAXPOOLSIZE= "maxPoolSize";
+	static final String MINPOOLSIZE= "minPoolSize";
+	static final String ACQUISITIONTIMEOUT ="acquisitionTimeout";
+	static final String RERUNREQUESTONSTART = "rerunRequestOnStart";
+	static final String ACQUIREINCREMENT="acquireIncrement";
+	static final String JNDINAME="jndiName";
+	static final String MAXIDLETIME="maxIdleTime";
+	static final String STMTCACHESIZE="stmtCacheSize";
+	static final String TESTQUERY="testQuery";
+	static final String HIRACHANNEL="hiraChannel";
+	static final String PORT="port";
+	static final String PROTOCOLHANDLER="protocolHandler";
+	 
+	private final Map<String, Engine> Egmap = Collections.synchronizedMap(new LinkedHashMap<String, Engine>());
+	private final Map<Integer, Executor> Ecmap = Collections.synchronizedMap(new LinkedHashMap<Integer, Executor>());
+	private final Map<String, QueueManager> QMmap = Collections.synchronizedMap(new LinkedHashMap<String, QueueManager>());
+	private final Map<String, DataSource> DSmap = Collections.synchronizedMap(new LinkedHashMap<String, DataSource>());
+	private final Map<String, Channel> Cmap = Collections.synchronizedMap(new LinkedHashMap<String, Channel>());
+	
+	public void egparse(File configFile) throws Exception {
+		synchronized(Egmap){
+			if(Egmap.size() > 0){
+				Egmap.clear();
+			}
+			SAXParserFactory Egspf = SAXParserFactory.newInstance();
+			SAXParser Egsaxp = Egspf.newSAXParser();
+			Egsaxp.parse(configFile, this);
+		}
+	}
+	public void ecparse(File configFile) throws Exception {
+		synchronized(Ecmap){
+			if(Ecmap.size() > 0){
+				Ecmap.clear();
+			}
+			SAXParserFactory Ecspf = SAXParserFactory.newInstance();
+			SAXParser Ecsaxp = Ecspf.newSAXParser();
+			Ecsaxp.parse(configFile, this);
+		}
+	}
+	public void dsparse(File configFile) throws Exception {
+		synchronized(DSmap){
+			if(DSmap.size() > 0){
+				DSmap.clear();
+			}
+			SAXParserFactory DSspf = SAXParserFactory.newInstance();
+			SAXParser DSsaxp = DSspf.newSAXParser();
+			DSsaxp.parse(configFile, this);
+		}
+	}
+	public void cparse(File configFile) throws Exception {
+		synchronized(Cmap){
+			if(Cmap.size() > 0){
+				Cmap.clear();
+			}
+			SAXParserFactory Cspf = SAXParserFactory.newInstance();
+			SAXParser Csaxp = Cspf.newSAXParser();
+			Csaxp.parse(configFile, this);
+		}
+	}
+	public void qmparse(File configFile) throws Exception {
+		synchronized(QMmap){
+			if(QMmap.size() > 0){
+				QMmap.clear();
+			}
+			SAXParserFactory QMspf = SAXParserFactory.newInstance();
+			SAXParser QMsaxp = QMspf.newSAXParser();
+			QMsaxp.parse(configFile, this);
+		}
+	}
+	
+	
+	public void egstartElement(String uri, String localName, String qName, Attributes attr) throws SAXException{
+		if(ENGINE.equals(qName)){
+			try{
+				String developMode = getAttributeBool(attr, DEVELOPMODE, "true");
+				String standAlone = getAttributeBool(attr, STANDALONE, "true");
+				String streamEnabled = getAttributeBool(attr, STREAMENABLED , "false");
+				String xmlEncoding = getAttribute(attr, XMLENCODING);
+				String userFunctionPath = getAttribute(attr, USERFUNCTIONPATH);
+				String sqlLogLevel = getAttribute(attr, SQLLOGLEVEL);
+				String log4jWatchInterval = getAttribute(attr,LOG4JWATCHINTERVAL);
+				String magicOneLogger = getAttribute(attr, MAGICONELOGGER);
+				
+				Engine ro = new Engine(developMode, standAlone, streamEnabled, xmlEncoding,
+						userFunctionPath, sqlLogLevel, log4jWatchInterval);
+				ro.setmagicOneLogger(magicOneLogger);
+				
+				Egmap.put(developMode, ro);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+	}
+	public void ecstartElement(String uri, String localName, String qName, Attributes attr) throws SAXException{
+		if(EXECUTOR.equals(qName)){
+			try{
+				int executeQueueMaxSize = getAttributeInt(attr, EXECUTEQUEUEMAXSIZE, 1024);
+				int executeThreadMaxSize = getAttributeInt(attr, EXECUTETHREADMAXSIZE, 20);
+				
+				Executor ro = new Executor(executeQueueMaxSize);
+				ro.setexecuteThreadMaxSize(executeThreadMaxSize);
+				
+				Ecmap.put(executeQueueMaxSize, ro);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+	}
+	public void qmstartElement(String uri, String localName, String qName, Attributes attr) throws SAXException{
+		if(QUEUEMANAGER.equals(qName)){
+			try{
+				String managerEnabled = getAttribute(attr, DEVELOPMODE);
+				String driver = getAttribute(attr, STANDALONE);
+				String url = getAttribute(attr, STREAMENABLED);
+				String user = getAttribute(attr, XMLENCODING);
+				String password = getAttribute(attr, USERFUNCTIONPATH);
+				int maxPoolSize = getAttributeInt(attr, SQLLOGLEVEL);
+				int minPoolSize = getAttributeInt(attr,LOG4JWATCHINTERVAL);
+				int acquisitionTimeout = getAttributeInt(attr, MAGICONELOGGER);
+				String rerunRequestOnStart = getAttribute(attr, MAGICONELOGGER);
+				
+				QueueManager ro = new QueueManager(managerEnabled, driver, url, user,
+						password, maxPoolSize, minPoolSize, acquisitionTimeout);
+				ro.setrerunRequestOnStart(rerunRequestOnStart);
+				
+				QMmap.put(managerEnabled, ro);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+	}
+
+    
+	public void ecStartElement(String uri, String localName, String qName, Attributes attr) throws SAXException{
+		
+	}
+    public void qmStartElement(String uri, String localName, String qName, Attributes attr) throws SAXException{
+	
+    }
+    public void dsStartElement(String uri, String localName, String qName, Attributes attr) throws SAXException{
+	
+    }
+    public void cStartElement(String uri, String localName, String qName, Attributes attr) throws SAXException{
+	
+    }
+	
+	private String getAttribute(Attributes attr, String name){
+		String o = attr.getValue(name);
+		return o == null ? "" : o;
+	}
+	private int getAttributeInt(Attributes attr, String name, int defaultValue){
+		try{
+			String o = attr.getValue(name);
+			return Integer.parseInt(o);
+		}catch(Exception e){
+			return defaultValue;
+		}
+	}
+	
+	private String getAttributeBool(Attributes attr, String name, String defaultValue){
+		
+			String o = attr.getValue(name);
+			return o == "true" ? "ture" : defaultValue;
+	}
+	
+void getEngine() {
+	
+}
+void getExecutor() {
+	
+}
+void getQueueManager() {
+	
+}
+void DataSource(String name) {
+	
+}
+void DataSources() {
+	
+}
+void getChannel(String name) {
+	
+} 
+void getChannels() {
+	
+} 
+}

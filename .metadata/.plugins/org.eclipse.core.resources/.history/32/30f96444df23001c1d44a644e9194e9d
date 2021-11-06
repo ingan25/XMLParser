@@ -1,0 +1,188 @@
+package XMLParser1;
+
+import org.xml.sax.Attributes;
+
+public class DataSource {
+	static final String ACQUISITIONTIMEOUT = "acquisitionTimeout";
+	static final String MINPOOLSIZE = "minPoolSize";
+	static final String MAXPOOLSIZE = "maxPoolSize";
+	static final String PASSWORD = "password";
+	static final String USER = "user";
+	static final String URI = "url";
+	static final String DRIVER = "driver";
+	static final String TESTQUERY = "testQuery";
+	static final String STMTCACHESIZE = "stmtCacheSize";
+	static final String MAXIDLETIME = "maxIdleTime";
+	static final String JNDINAME = "jndiName";
+	static final String ACQUIREINCREMENT = "acquireIncrement";
+	
+	private int acquisitionTimeout;
+	private int minPoolSize;
+	private int maxPoolSize;
+	private String password;
+	private String user;
+	private String url;
+	private String driver;
+	private String testQuery;
+	private int stmtCacheSize;
+	private int maxIdleTime;
+	private String jndiName;
+	private int acquireIncrement;
+	
+	public int getacquireIncrement() {
+		return acquireIncrement;
+	}
+
+	public void setacquireIncrement(int acquireIncrement) {
+		this.acquireIncrement = acquireIncrement;
+	}
+	
+	public int getacquisitionTimeout() {
+		return acquisitionTimeout;
+	}
+
+	public void setacquisitionTimeout(int acquisitionTimeout) {
+		this.acquisitionTimeout = acquisitionTimeout;
+	}
+  
+	public String getjndiName() {
+		return jndiName;
+	}
+
+	public void setjndiName(String jndiName) {
+		this.jndiName = jndiName;
+	}
+	
+	public String getdriver() {
+		return driver;
+	}
+
+	public void setdriver(String driver) {
+		this.driver = driver;
+	}
+	
+	public int getmaxIdleTime() {
+		return maxIdleTime;
+	}
+
+	public void setmaxIdleTime(int maxIdleTime) {
+		this.maxIdleTime = maxIdleTime;
+	}
+	
+	public int getmaxPoolSize() {
+		return maxPoolSize;
+	}
+
+	public void setmaxPoolSize(int maxPoolSize) {
+		this.maxPoolSize = maxPoolSize;
+	}
+	
+	public int getminPoolSize() {
+		return minPoolSize;
+	}
+
+	public void setminPoolSize(int minPoolSize) {
+		this.minPoolSize = minPoolSize;
+	}
+
+	public String getuser() {
+		return user;
+	}
+
+	public void setuser(String user) {
+		this.user = user;
+	}
+	
+	public String getpassword() {
+		return password;
+	}
+
+	public void setpassword(String password) {
+		this.password = password;
+	}
+
+	
+
+	public String geturl() {
+		return url;
+	}
+
+	public void seturl(String url) {
+		this.url = url;
+	}
+
+	
+
+	public String gettestQuery() {
+		return testQuery;
+	}
+
+	public void settestQuery(String testQuery) {
+		this.testQuery = testQuery;
+	}
+
+	public int getstmtCacheSize() {
+		return stmtCacheSize;
+	}
+
+	public void setstmtCacheSize(int stmtCacheSize) {
+		this.stmtCacheSize = stmtCacheSize;
+	}
+
+	
+
+	
+
+	
+	
+	public static String getAttribute(Attributes attr, String name){
+		String o = attr.getValue(name);
+		return o == null ? "" : o;
+	}
+	
+	public static int getAttributeInt(Attributes attr, String name, int defaultValue){
+		try{
+			String o = attr.getValue(name);
+			return Integer.parseInt(o);
+		}catch(Exception e){
+			return defaultValue;
+		}
+	}
+	
+	private String getAttributeBool(Attributes attr, String name, String defaultValue){
+		
+		String o = attr.getValue(name);
+		return o == "true" ? "ture" : defaultValue;
+	}
+	
+	public DataSource(Attributes attr) {
+		acquisitionTimeout = getAttributeInt(attr, ACQUISITIONTIMEOUT, -1);
+		minPoolSize = getAttributeInt(attr, MINPOOLSIZE, -1);
+		maxPoolSize = getAttributeInt(attr, MAXPOOLSIZE, -1);
+		password = getAttribute(attr, PASSWORD);
+		user = getAttribute(attr, USER);
+		url = getAttribute(attr, URI);
+	    driver = getAttribute(attr, DRIVER);
+		testQuery = getAttribute(attr, TESTQUERY);
+		stmtCacheSize = getAttributeInt(attr, STMTCACHESIZE, -1);
+		maxIdleTime = getAttributeInt(attr, STMTCACHESIZE, -1);
+		jndiName = getAttribute(attr, JNDINAME);
+		acquireIncrement = getAttributeInt(attr, ACQUIREINCREMENT, -1);
+	}
+
+	public String toString() {
+		return "acquireIncrement : " + getacquireIncrement() + "\n" +
+				"\t - acquisition Time out : " + getacquisitionTimeout() + "\n" +
+				   "\t - driver : " + getdriver() + "\n" + 
+				   "\t - jndi Name: " + getjndiName()+ "\n" +
+				   "\t - maxIdleTime: " + getmaxIdleTime() + "\n" + 
+				   "\t - maxPool Size : " + getmaxPoolSize() + "\n" + 
+				   "\t - minPool Size : " + getminPoolSize() + "\n" +
+				   "\t - user : " + getuser() + "\n" + 
+				   "\t - password : " + getpassword() + "\n" + 
+				   "\t - stmtCache Size: " + getstmtCacheSize() + "\n" + 
+				   "\t - test Query: " + gettestQuery() + "\n" +
+				   "\t - url: " + geturl();
+	}
+	
+}

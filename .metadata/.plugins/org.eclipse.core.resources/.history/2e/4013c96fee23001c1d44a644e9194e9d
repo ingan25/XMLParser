@@ -1,0 +1,74 @@
+package XMLParser1;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+public class ConfigObject {
+	private Engine Eg;
+	private Executor Ec;
+	private QueueManager QM;
+	private LinkedList<DataSource> DS = new LinkedList();
+	private LinkedList<Channel> C = new LinkedList();
+	
+	public ConfigObject() {	}
+	
+	public ConfigObject(Engine Eg) {
+		this.Eg = Eg;
+	}
+	
+	public ConfigObject(Executor Ec) {
+		this.Ec = Ec;
+	}
+	
+	public ConfigObject(QueueManager QM) {
+		this.QM = QM;
+	}
+	
+	public ConfigObject(DataSource DS) {
+		this.DS.add(DS);
+	}
+	
+	public ConfigObject(Channel C) {
+		this.C.add(C);
+	}
+
+	public Engine getEngine() {
+		return Eg;
+	}
+
+	public void setEngine(Engine Eg) {
+		this.Eg = Eg;
+	}
+
+	public Executor getExecutor() {
+		return Ec;
+	}
+
+	public void setExecutor(Executor Ec) {
+		this.Ec = Ec;
+	}
+
+	public QueueManager getQueueManager() {
+		return QM;
+	}
+
+	public void setQueueManager(QueueManager QM) {
+		this.QM = QM;
+	}
+
+	public void setDataSource(DataSource DS) {
+		this.DS.add(DS);
+	}
+	
+	public LinkedList<DataSource> getDataSource() {
+		return DS;
+	}
+
+	public void setChannel(Channel C) {
+		this.C.add(C);
+	}
+	
+	public LinkedList<Channel> getChannel() {
+		return C;
+	}	
+}

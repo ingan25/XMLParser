@@ -1,0 +1,109 @@
+package xxml;
+
+import java.io.File;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+public class ConfigParser extends DefaultHandler{
+
+	static final String ENGINE = "Engine";
+	static final String Executor = "Executor";
+	static final String QueueManager = "QueueManager";
+	static final String DataSource = "DataSource";
+	static final String Channel = "Channel";
+	
+	static final String developMode = "developMode";
+	static final String standAlone = "standAlone";
+	static final String streamEnabled = "streamEnabled";
+	static final String xmlEncoding = "xmlEncoding";
+	static final String userFunctionPath= "tcpClient";
+	static final String sqlLogLevel = "callName";
+	static final String log4jWatchInterval = "paramSeparator";
+	static final String magicOneLogger = "fixedParamName";
+	static final String executeQueueMaxSize = "executeQueueMaxSize";
+	static final String executeThreadMaxSize = "executeThreadMaxSize";
+	static final String managerEnabled= "managerEnabled";
+	static final String driver = "driver";
+	static final String url = "url";
+	static final String user= "user";
+	static final String password = "password";
+	static final String maxPoolSize= "maxPoolSize";
+	static final String minPoolSize= "minPoolSize";
+	static final String acquisitionTimeout ="acquisitionTimeout";
+	static final String rerunRequestOnStart = "rerunRequestOnStart";
+	static final String acquireIncrement="acquireIncrement";
+	static final String jndiName="jndiName";
+	static final String maxIdleTime="maxIdleTime";
+	static final String stmtCacheSize="stmtCacheSize";
+	static final String testQuery="testQuery";
+	static final String hiraChannel="hiraChannel";
+	static final String port="port";
+	static final String protocolHandler="protocolHandler";
+	 
+	private final Map<String, Engine> Egmap = Collections.synchronizedMap(new LinkedHashMap<String, Engine>());
+	private final Map<String, Executor> Ecmap = Collections.synchronizedMap(new LinkedHashMap<String, Executor>());
+	private final Map<String, QueueManager> QMmap = Collections.synchronizedMap(new LinkedHashMap<String, QueueManager>());
+	private final Map<String, DataSource> DSmap = Collections.synchronizedMap(new LinkedHashMap<String, DataSource>());
+	private final Map<String, Channel> Cmap = Collections.synchronizedMap(new LinkedHashMap<String, Channel>());
+	
+	public void parse(File configFile) throws Exception {
+		synchronized(Egmap){
+			if(Egmap.size() > 0){
+				Egmap.clear();
+			}
+			SAXParserFactory Egspf = SAXParserFactory.newInstance();
+			SAXParser Egsaxp = Egspf.newSAXParser();
+			Egsaxp.parse(configFile, this);
+		}
+	}
+	public void parse(File configFile) throws Exception {
+		synchronized(Ecmap){
+			if(Ecmap.size() > 0){
+				Ecmap.clear();
+			}
+			SAXParserFactory Ecspf = SAXParserFactory.newInstance();
+			SAXParser Ecsaxp = Ecspf.newSAXParser();
+			Ecsaxp.parse(configFile, this);
+		}
+	}
+	
+	
+	public void startElement(String uri, String localName, String qName, Attributes attr) throws SAXException{
+		
+	}
+	
+	private String getAttribute(Attributes attr, String name){
+		String o = attr.getValue(name);
+		return o == null ? "" : o;
+	}
+	
+void getEngine() {
+	
+}
+void getExecutor() {
+	
+}
+void getQueueManager() {
+	
+}
+void DataSource(String name) {
+	
+}
+void DataSources() {
+	
+}
+void getChannel(String name) {
+	
+} 
+void getChannels() {
+	
+} 
+}

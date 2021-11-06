@@ -1,0 +1,70 @@
+package TempVo;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
+
+
+// ResultSetMetaData 객체 연습
+
+public class test {
+	public static void main(String [] args) throws IOException, SQLException,
+									 ClassNotFoundException{
+		// DBBean 클래스를 생성하여 oracle DB를 실행시키자
+		orcle oracle = new orcle("oracle");				
+		// Oracle Driver 실행
+		oracle.loadDriver();								
+		// DB 접속
+		oracle.setConnection();								
+		// 접속정보 GET
+		Connection conn = oracle.getConnection();			
+		// Statement 생성
+		Statement stmt = conn.createStatement();			
+		// 실행 될 SQL 선언
+		String sql = "SELECT * FROM emp";					
+		// 문자 열 AS 를 주기위해서는 ' \ ' 를 준다.
+		// String sql = "SELECT empno AS \"사번\" from emp"; 
+		// ResultSet 에는 데이터만 들어 있어서 구조를 알수 없다.
+		// 쿼리의 데이터를 ResultSet 에 담는다.
+		ResultSet rs = stmt.executeQuery(sql);			
+		// ResultSet의 데이터를 ResultSetMetaData 로 구조를 파악한다.
+		ResultSetMetaData rsmd = rs.getMetaData();	
+		int count = rsmd.getColumnCount();			// 컬럼의 갯수를 구할 수 있다.
+		while(rs.next()){						// 해당 컬럼에 있는 데이터를 출력한다.
+			for(int i = 1; i <= count; i++){				// 컬럼의 시작은 1부터 시작이다.
+				// Column 의 Label 을 알아내자
+				//System.out.println("label = " + rsmd.getColumnLabel(i));				
+				// Column 의 Type 을 알아내자
+				//System.out.println("ColumnType = " + rsmd.getColumnType(i));			
+				// Column 의 Name 을 알아내자
+				//System.out.println("name = " + rsmd.getColumnName(i));         		
+				// Column Type Name 을 알아내자
+				//System.out.println("TypeName = " + rsmd.getColumnTypeName(i));
+				
+				// TYPE 를 구분하며 출력하기 위해 switch 를 사용한다.
+				switch(rsmd.getColumnType(i)){				
+				case Types.NUMERIC :											
+				case Types.INTEGER :
+					System.out.printf("%d\t", rs.getInt(i)); break;
+				case Types.FLOAT :
+					System.out.printf("%.2f\t", rs.getFloat(i)); break;
+				case Types.DOUBLE :
+					System.out.printf("%.2f\t", rs.getDouble(i)); break;
+				case Types.DATE :
+					System.out.printf("%tF\t", rs.getDate(i)); break;
+				case Types.CHAR :
+				default :
+					System.out.printf("%s\t", rs.getString(i));
+				}  //switch end
+			} //for end
+			System.out.println();
+		}//while end
+		oracle.rsClose();
+		oracle.stmtClose();
+		oracle.connClose();
+	}
+}

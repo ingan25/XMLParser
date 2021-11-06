@@ -1,0 +1,134 @@
+package xxml;
+
+public class DataSource {
+ private int acquireIncrement;
+ private int acquisitionTimeout;
+ private String driver;
+ private String jndiName;
+ private int maxIdleTime;
+ private int maxPoolSize;
+ private int minPoolSize;
+ private String user;
+ private String password;
+ private int stmtCacheSize;
+ private String testQuery;
+ private String url;
+ 
+ public DataSource(int acquireIncrement,int acquisitionTimeout,String driver,String jndiName
+		 ,int maxIdleTime,int maxPoolSize,int minPoolSize,String user, 
+		 String password,int stmtCacheSize, String testQuery,String url)  throws Exception{
+		setacquireIncrement(acquireIncrement);
+		setacquisitionTimeout(acquisitionTimeout);
+		setdriver(driver);
+		setjndiName(jndiName);
+		setmaxIdleTime(maxIdleTime);
+		setmaxPoolSize(maxPoolSize);
+		setminPoolSize(minPoolSize);
+		setuser(user);
+		setpassword(password);
+		setstmtCacheSize(stmtCacheSize);
+		settestQuery(testQuery);
+		seturl(url);
+	}
+ public int getacquireIncrement() {
+		return acquireIncrement;
+	}
+
+	void setacquireIncrement(int acquireIncrement) throws Exception{
+		this.acquireIncrement = acquireIncrement;
+	}
+	public String getdriver() {
+		return driver;
+	}
+
+	void setdriver(String driver) throws Exception{
+		this.driver = driver;
+	}
+	public String geturl() {
+		return url;
+	}
+
+	void seturl(String url) throws Exception{
+		this.url = url;
+	}
+	public String getuser() {
+		return user;
+	}
+
+	void setuser(String user) throws Exception{
+		this.user = user;
+	}
+	public String getpassword() {
+		return password;
+	}
+
+	void setpassword(String password) throws Exception{
+		this.password = password;
+	}
+	public int getmaxPoolSize() {
+		return maxPoolSize;
+	}
+
+	void setmaxPoolSize(int maxPoolSize) throws Exception{
+		this.maxPoolSize = maxPoolSize;
+	}
+	public int getminPoolSize() {
+		return minPoolSize;
+	}
+	void setminPoolSize(int minPoolSize) throws Exception{
+		this.minPoolSize = minPoolSize;
+	}
+	
+	public int getacquisitionTimeout() {
+		return acquisitionTimeout;
+	}
+	
+	void setacquisitionTimeout(int acquisitionTimeout) throws Exception{
+		this.acquisitionTimeout = acquisitionTimeout;
+	}
+	public String getjndiName() {
+		return jndiName;
+	}
+	
+	void setjndiName(String jndiName) throws Exception{
+		this.jndiName = jndiName;
+	}
+	public int getmaxIdleTime() {
+		return maxIdleTime;
+	}
+
+	void setmaxIdleTime(int maxIdleTime) throws Exception{
+		this.maxIdleTime = maxIdleTime;
+	}
+	public int getstmtCacheSize() {
+		return stmtCacheSize;
+	}
+
+	void setstmtCacheSize(int stmtCacheSize) throws Exception{
+		this.stmtCacheSize = stmtCacheSize;
+	}
+	public int gettestQuery() {
+		return stmtCacheSize;
+	}
+
+	void settestQuery(String testQuery) throws Exception{
+		this.testQuery = testQuery;
+	}
+	
+	public String toString(){
+		return "acquireIncrement : " + getacquireIncrement() + "\n" +
+			   "\t - driver : " + getdriver() + "\n" + 
+			   "\t - url: " + geturl() + "\n" + 
+			   "\t - user : " + getuser() + "\n" + 
+			   "\t - password : " + getpassword() + "\n" + 
+			   "\t - maxPool Size : " + getmaxPoolSize() + "\n" + 
+			   "\t - minPool Size : " + getminPoolSize() + "\n" +
+			   "\t - acquisition Time out : " + getacquisitionTimeout() + "\n" +
+			   "\t - maxIdleTime: " + getmaxIdleTime() + "\n" + 
+			   "\t - stmtCache Size: " + getstmtCacheSize() + "\n" + 
+			   "\t - test Query: " + gettestQuery() + "\n" +
+			   "\t - jndi Name: " + getjndiName(); 
+			   
+	}
+	
+}

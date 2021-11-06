@@ -1,0 +1,58 @@
+package XMLParser1;
+
+import org.xml.sax.Attributes;
+
+public class Executor {
+	static final String EXECUTETHREADMAXSIZE = "executeThreadMaxSize";
+	static final String EXECUTEQUEUEMAXSIZE = "executeQueueMaxSize";
+
+	private int executeThreadMaxSize;
+	private int executeQueueMaxSize;
+
+	public int getexecuteThreadMaxSize() {
+		return executeThreadMaxSize;
+	}
+
+	public void setexecuteThreadMaxSize(int executeThreadMaxSize) {
+		this.executeThreadMaxSize = executeThreadMaxSize;
+	}
+
+	public int getexecuteQueueMaxSize() {
+		return executeQueueMaxSize;
+	}
+
+	public void setexecuteQueueMaxSize(int executeQueueMaxSize) {
+		this.executeQueueMaxSize = executeQueueMaxSize;
+	}
+
+	public static String getAttribute(Attributes attr, String name) {
+		String o = attr.getValue(name);
+		return o == null ? "" : o;
+	}
+
+	public static int getAttributeInt(Attributes attr, String name, int defaultValue) {
+		try {
+			String o = attr.getValue(name);
+			return Integer.parseInt(o);
+		} catch (Exception e) {
+			return defaultValue;
+		}
+	}
+
+	private String getAttributeBool(Attributes attr, String name, String defaultValue) {
+
+		String o = attr.getValue(name);
+		return o == "true" ? "ture" : defaultValue;
+	}
+
+	Executor(Attributes attr) {
+		executeThreadMaxSize = getAttributeInt(attr, EXECUTETHREADMAXSIZE, -1);
+		executeQueueMaxSize = getAttributeInt(attr, EXECUTEQUEUEMAXSIZE, -1);
+	}
+
+	public String toString() {
+		return "Executor execute QueueMaxSize : " + getexecuteQueueMaxSize() + "\n" 
+           	+  "execute ThreadMaxSize : "+ getexecuteThreadMaxSize();
+	}
+
+}
